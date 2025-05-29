@@ -1,8 +1,9 @@
 ♻️ Smart Waste Management System
 
 👤 Author & Contributors
-Author: Alpha-hub9
-Co-author: Aneebon
+Author: Alpha-hub9.
+
+Co-author: Aneebon.
 
 A smart AI-powered waste management system built during a hackathon to automate waste segregation, track bin status in real time, and foster community participation via a waste exchange platform.
 
