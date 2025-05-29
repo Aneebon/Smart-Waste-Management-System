@@ -1,6 +1,7 @@
 ♻️ Smart Waste Management System
 
 👤 Author & Contributors
+
 Author: Alpha-hub9.
 
 Co-author: Aneebon.
