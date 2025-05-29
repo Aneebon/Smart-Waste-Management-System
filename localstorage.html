@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Waste Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #333;
+            color: white;
+            position: fixed;
+            padding-top: 20px;
+            transition: left 0.3s;
+            left: -250px;
+            top: 60px;
+        }
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background: #575757;
+        }
+        .sidebar i {
+            margin-right: 10px;
+        }
+        
+        /* Navbar */
+        .navbar {
+            width: 100%;
+            height: 60px;
+            background: #28a745;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding-left: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        .navbar h1 {
+            margin: 0 auto;
+        }
+        .points {
+            position: absolute;
+            right: 20px;
+            font-size: 18px;
+        }
+        
+        /* Menu Button */
+        .menu-btn {
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        /* Main Content */
+        .content {
+            margin-top: 80px;
+            padding: 20px;
+            width: 100%;
+            transition: margin-left 0.3s;
+        }
+        
+        .sidebar.open {
+            left: 0;
+        }
+        .content.shift {
+            margin-left: 250px;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Navbar -->
+    <div class="navbar">
+        <button class="menu-btn" onclick="toggleSidebar()">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <h1>Smart Waste Management</h1>
+        <div class="points">Points: <span id="userPoints">0</span></div>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a href="#"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="#"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        <a href="#"><i class="fa-solid fa-file-alt"></i> Reports</a>
+        <a href="#"><i class="fa-solid fa-cog"></i> Settings</a>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="content" id="content">
+        <h2>Why Smart Waste Management?</h2>
+        <p>Smart waste management is an innovative approach to handling waste efficiently. It reduces pollution, optimizes waste collection routes, and minimizes overflow in bins.</p>
+        
+        <h2>Consequences of Poor Waste Management</h2>
+        <p>Without proper waste management, cities face problems like pollution, health hazards, and inefficient waste disposal. Overflowing bins can cause sanitation issues and attract pests.</p>
+        
+        <h2>How Our System Helps</h2>
+        <ul>
+            <li>Real-time waste monitoring</li>
+            <li>Automated alerts for bin collection</li>
+            <li>Optimized waste disposal routes</li>
+            <li>Better city cleanliness and hygiene</li>
+        </ul>
+        
+        <h2>Report Waste Bin Status</h2>
+        <button onclick="reportBin()">Report Bin Status</button>
+    </div>
+    
+    <script>
+        function toggleSidebar() {
+            let sidebar = document.getElementById("sidebar");
+            let content = document.getElementById("content");
+            
+            if (sidebar.classList.contains("open")) {
+                sidebar.classList.remove("open");
+                content.classList.remove("shift");
+            } else {
+                sidebar.classList.add("open");
+                content.classList.add("shift");
+            }
+        }
+
+        // Initialize Points
+        let userPoints = localStorage.getItem("userPoints") || 0;
+        document.getElementById("userPoints").innerText = userPoints;
+
+        function reportBin() {
+            userPoints = parseInt(userPoints) + 10; // Add 10 points per report
+            localStorage.setItem("userPoints", userPoints);
+            document.getElementById("userPoints").innerText = userPoints;
+            alert("✅ Report Submitted! You earned 10 points!");
+        }
+    </script>
+    
+</body>
+</html>

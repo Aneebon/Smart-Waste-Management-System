@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Waste Dashboard</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+
+        function drawChart(dataArray) {
+            var data = google.visualization.arrayToDataTable(dataArray);
+            var options = { title: 'Waste Bin Levels', hAxis: { title: 'Location' }, vAxis: { title: 'Bin Level (%)' } };
+            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+
+        async function fetchData() {
+            const sheetID = "1YhSJz7lFr4lvGDHU0GZ5RtLQjSgLoASaSn0x-KkES4A";
+            const apiKey = "AIzaSyA7u6gng2tY-b1MKiiisULbhiXhgun39h0";
+            const range = "Sheet1!A:B"; // Adjust based on your sheet
+
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${range}?key=${apiKey}`;
+
+            try {
+                let response = await fetch(url);
+                let data = await response.json();
+
+                if (data.values) {
+                    let chartData = [["Location", "Bin Level"]];
+
+                    // Convert bin levels to numbers
+                    data.values.slice(1).forEach(row => {
+                        chartData.push([row[0], parseFloat(row[1]) || 0]); // Convert second column to number
+                    });
+
+                    google.charts.setOnLoadCallback(() => drawChart(chartData));
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        google.charts.setOnLoadCallback(fetchData);
+    </script>
+</head>
+<body>
+    <h1>Smart Waste Dashboard</h1>
+    <div id="chart_div" style="width: 80%; height: 500px; margin: auto;"></div>
+</body>
+</html>

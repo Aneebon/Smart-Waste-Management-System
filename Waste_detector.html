@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Image Detector (Prototype)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #218838; /* Dark Green */
+            text-align: center;
+        }
+
+        #webcam-container,
+        #image-container {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        #webcam-container canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #label-container div {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        #uploaded-image {
+            max-width: 200px;
+            max-height: 200px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button {
+            background-color: #28a745; /* Green */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #218838; /* Dark Green */
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+</head>
+
+<body>
+    <h1>Teachable Machine Image Model</h1>
+
+    <h2>Webcam Prediction</h2>
+    <div style="text-align:center;">
+        <button type="button" onclick="initWebcam()">Start Webcam and Prediction</button>
+    </div>
+    <div id="webcam-container"></div>
+
+    <h2>Image Upload Prediction</h2>
+    <div style="text-align:center;">
+        <input type="file" id="image-upload" accept="image/*">
+    </div>
+    <div style="text-align:center;">
+        <img id="uploaded-image" src="#" alt="Uploaded Image" style="display: none;">
+    </div>
+    <div style="text-align:center;">
+        <button type="button" id="predict-button" disabled>Predict Image</button>
+    </div>
+    <div id="image-container"></div>
+
+    <div id="label-container"></div>
+
+    <script type="text/javascript">
+        // the link to your model provided by Teachable Machine export panel
+        const URL = "https://teachablemachine.withgoogle.com/models/veTT7jDVp/"; // Replace with your model URL
+
+        let model, webcam, labelContainer, maxPredictions;
+        let uploadedImage = document.getElementById('uploaded-image');
+        let predictButton = document.getElementById('predict-button');
+        let maxProbabilities = []; // Store max probabilities for each class
+        let predictionTimeout; // Variable to hold the timeout
+
+        // Load the image model
+        async function loadModel() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+            labelContainer = document.getElementById("label-container");
+            labelContainer.innerHTML = ''; // Clear existing labels
+            for (let i = 0; i < maxPredictions; i++) {
+                labelContainer.appendChild(document.createElement("div"));
+                maxProbabilities[i] = 0; // Initialize max probabilities to 0
+            }
+        }
+
+        // --- Webcam Functionality ---
+        async function initWebcam() {
+            await loadModel();
+            const flip = true;
+            webcam = new tmImage.Webcam(200, 200, flip);
+            await webcam.setup();
+            await webcam.play();
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+            startWebcamPrediction(); // Start the webcam prediction loop with timeout
+        }
+
+        function startWebcamPrediction() {
+            // Clear any existing timeout
+            clearTimeout(predictionTimeout);
+
+            // Reset max probabilities
+            for (let i = 0; i < maxPredictions; i++) {
+                maxProbabilities[i] = 0;
+            }
+
+            // Start the prediction loop
+            loop();
+
+            // Set a timeout to stop the prediction after 15 seconds
+            predictionTimeout = setTimeout(() => {
+                stopWebcamPrediction();
+            }, 15000); // Changed timeout to 15000 milliseconds (15 seconds)
+        }
+
+        function stopWebcamPrediction() {
+            clearTimeout(predictionTimeout);
+        }
+
+        async function loop() {
+            webcam.update();
+            await predict(webcam.canvas); // Pass the webcam canvas to predict
+            window.requestAnimationFrame(loop);
+        }
+
+        // --- Image Upload Functionality ---
+        document.getElementById('image-upload').addEventListener('change', async function(event) {
+            if (event.target.files && event.target.files[0]) {
+                const reader = new FileReader(); // Use FileReader to read the image file
+                reader.onload = function(e) {
+                    uploadedImage.onload = async () => {
+                        uploadedImage.style.display = 'block';
+                        predictButton.disabled = false; // Enable the predict button
+                    };
+                    uploadedImage.src = e.target.result; // Set the src to the FileReader result
+                }
+                reader.readAsDataURL(event.target.files[0]); // Read the image file as a data URL
+            } else {
+                uploadedImage.style.display = 'none';
+                predictButton.disabled = true; // Disable the predict button if no file is selected
+            }
+        });
+
+        // Event listener for the predict button
+        predictButton.addEventListener('click', async function() {
+            await predict(uploadedImage); // Predict on the uploaded image
+        });
+
+        // --- Prediction Function ---
+        async function predict(source) {
+            const prediction = await model.predict(source);
+            for (let i = 0; i < maxPredictions; i++) {
+                const probability = prediction[i].probability * 100; // Convert to percentage
+
+                // Update max probability if current probability is higher
+                if (probability > maxProbabilities[i]) {
+                    maxProbabilities[i] = probability;
+                }
+
+                if (predictionTimeout == null || predictionTimeout._destroyed == true || predictionTimeout._idleTimeout == -1) {
+                    const classPrediction = prediction[i].className + ": " + probability.toFixed(1) + "%"; // Format as percentage
+                    labelContainer.childNodes[i].innerHTML = classPrediction;
+                } else { //after timeout, only display the max prediction
+                    const classPrediction = prediction[i].className + ": " + maxProbabilities[i].toFixed(1) + "%"; // Format as percentage
+                    labelContainer.childNodes[i].innerHTML = classPrediction;
+                }
+            }
+        }
+
+        // Load model on page load (optional)
+        loadModel();
+    </script>
+</body>
+
+</html>

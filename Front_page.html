@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Waste Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Roboto', sans-serif; /* Use Roboto for overall feel */
+            margin: 0;
+            padding: 0;
+            background-color: #E8F5E9; /* Light green background */
+            color: #33691E; /* Dark green text */
+            overflow-x: hidden;
+            width: 100%;
+            line-height: 1.6;
+        }
+
+        /* Header (Inspired by Teachable Machine) */
+        .header {
+            background-color: #fff;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 50px; /* Push down below fixed navbar */
+        }
+
+        .header h1 {
+            color: #4CAF50; /* Green header */
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #6c757d;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .main-content h2 {
+            font-size: 2em;
+            margin-bottom: 1em;
+            color: #4CAF50; /* Green heading */
+        }
+
+        .main-content p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 2em;
+            color: #6c757d;
+        }
+
+        /* Project Cards (Modified for Waste Management) */
+        .projects {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 3em;
+        }
+
+        .project-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            padding: 20px;
+            text-align: left;
+            transition: transform 0.3s ease;
+            text-decoration: none; /* Remove underline from link */
+            color: inherit; /* Inherit color from body */
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 0.5em;
+            color: #33691E; /* Dark green card heading */
+        }
+
+        .project-card p {
+            font-size: 1em;
+            color: #6c757d;
+        }
+
+        .project-card img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 1em;
+        }
+
+        /* Button (Teachable Machine Style) */
+        .button {
+            display: inline-block;
+            background-color: #4CAF50; /* Green button */
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1.2em;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #388E3C; /* Darker green on hover */
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #33691E; /* Dark green footer */
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+
+        /* Navbar (Kept from Original) */
+        .navbar {
+            width: 100%;
+            height: 50px;
+            background: #4CAF50; /* Green navbar */
+            color: #ffffff; /* White text */
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .navbar h1 {
+            margin: 0 auto;
+            font-size: 22px;
+            font-weight: 600; /* Slightly bolder */
+        }
+
+        /* Menu Button (Kept from Original) */
+        .menu-btn {
+            font-size: 22px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #ffffff; /* White icon color */
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: color 0.3s;
+        }
+        .menu-btn:hover {
+            color: #E8F5E9; /* Light green on hover */
+        }
+
+        /* Sidebar (Kept from Original) */
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background: #E8F5E9; /* Light green sidebar */
+            color: #33691E; /* Dark green text */
+            position: fixed;
+            padding-top: 20px;
+            transition: left 0.3s;
+            left: -220px;
+            top: 50px;
+            box-shadow: 0 2px 0 5px rgba(0, 0, 0, 0.05);
+        }
+        .sidebar a {
+            display: block;
+            color: #33691E; /* Dark green link color */
+            padding: 12px 20px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            border-radius: 0;
+        }
+        .sidebar a:hover {
+            background: #DCEDC8; /* Lighter green on hover */
+        }
+        .sidebar i {
+            margin-right: 8px;
+        }
+
+        /* Sidebar Toggle Classes (Kept from Original) */
+        .sidebar.open {
+            left: 0;
+        }
+        .content.shift {
+            margin-left: 220px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .projects {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .project-card {
+                width: 80%;
+            }
+            .content.shift {
+                margin-left: 0;
+            }
+             .sidebar {
+                width: 180px;
+                left: -180px;
+            }
+            .sidebar.open {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <button class="menu-btn" onclick="toggleSidebar()">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <h1>Smart Waste Management</h1>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>Smart Waste Management</h1>
+        <p>Innovating waste management with smart technology for a cleaner, sustainable future.</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h2>Explore Our Smart Waste Solutions</h2>
+        <p>Discover how our technology is transforming waste management practices and creating more efficient, eco-friendly systems.</p>
+
+        <!-- Project Cards (Waste Management Themed) -->
+        <div class="projects">
+            <a href="http://127.0.0.1:3000/Waste Management/Waste_management.html" class="project-card">
+                <!-- <img src="https://via.placeholder.com/300x200" alt="Smart Bin Monitoring"> -->
+                <h3>🚮Bin Monitoring</h3>
+                <p>Monitoring of waste levels in bins to optimize collection routes.</p>
+            </a>
+            <a href="http://127.0.0.1:3000/Waste Management/Gmap.html" class="project-card">
+                <!-- <img src="https://via.placeholder.com/300x200" alt="Route Optimization"> -->
+                <h3>📍Bin Location</h3>
+                <p>AI-powered route planning to reduce fuel consumption and emissions.</p>
+            </a>
+            <a href="http://127.0.0.1:3000/Waste Management/dashboard.html" class="project-card">
+                <!-- <img src="https://via.placeholder.com/300x200" alt="Data Analytics"> -->
+                <h3>📊Data Analytics</h3>
+                <p>Comprehensive data analysis for informed bin level.</p>
+            </a>
+             <a href="http://127.0.0.1:3000/Waste Management/Waste_detector.html" class="project-card">
+                <!-- <img src="https://via.placeholder.com/300x200" alt="Community Engagement"> -->
+                <h3>🔍Waste Detector</h3>
+                <p>Detects the type of waste in order to seperate them.</p>
+            </a>
+        </div>
+
+        <a href="#" class="button">Learn More</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2025 Smart Waste Management Solutions</p>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a href="http://127.0.0.1:3000/Waste%20Management/Front_page_demo.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="http://127.0.0.1:3000/Waste%20Management/dashboard.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        <a href="https://docs.google.com/spreadsheets/d/1YhSJz7lFr4lvGDHU0GZ5RtLQjSgLoASaSn0x-KkES4A/edit?gid=0#gid=0"><i class="fa-solid fa-file-alt"></i> Reports</a>
+        <a href="http://127.0.0.1:3000/Waste Management/Waste_detector.html"><i class="fa-solid fa-cog"></i> Waste Detector</a>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            let sidebar = document.getElementById("sidebar");
+            let content = document.getElementById("content");
+
+            if (sidebar.classList.contains("open")) {
+                sidebar.classList.remove("open");
+                content.classList.remove("shift");
+            } else {
+                sidebar.classList.add("open");
+                content.classList.add("shift");
+            }
+        }
+    </script>
+
+</body>
+</html>
