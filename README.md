@@ -1,45 +1,54 @@
-♻ Smart Waste Management System A Smart AI-Powered Waste Management System built during a hackathon to automate waste segregation, track bin status in real time, and foster community participation via a waste exchange platform.
+♻️ Smart Waste Management System
+A smart AI-powered waste management system built during a hackathon to automate waste segregation, track bin status in real time, and foster community participation via a waste exchange platform.
 
-🚀 Project Overview This project introduces an AI-integrated smart dustbin that automates trash sorting, monitors fill levels, and displays real-time data on a web dashboard. In addition, the system features an AI-powered waste exchange platform to enable recycling, reuse, and circular economy practices in local communities.
+🚀 Project Overview
+This project introduces an AI-integrated smart dustbin that automates trash sorting, monitors fill levels, and displays real-time data on a web dashboard. Additionally, it features an AI-powered waste exchange platform to enable recycling, reuse, and circular economy practices in local communities.
 
-🛠 Features 🧠 AI + Software Waste Exchange Platform powered by AI:
+🛠 Features
+🧠 AI + Software Waste Exchange Platform
+Suggests best exchange/reuse options
 
-Suggests best exchange/reuse options.
+Recommends local drop-off or pickup points
 
-Recommends local drop-off or pickup points.
+Community leaderboard & reward system
 
-Community leaderboard & reward system.
+🌐 Web Dashboard
+Displays real-time dustbin fill level
 
-Web Dashboard:
+Shows geolocation of dustbins on a map
 
-Displays real-time dustbin fill level.
+Analytics & usage trends
 
-Shows geolocation of dustbins on a map.
+🔔 Alerts & Notifications
+Email/SMS alerts when bin is full
 
-Analytics & usage trends.
+Notifications to recycling authorities
 
-Alerts & Notifications:
+⚙ Hardware Integration (Prototype)
+Auto-sorting mechanism (dry/wet/plastic/etc.)
 
-Email/SMS alert when bin is full.
+Ultrasonic sensor for fill-level detection
 
-Notification to recycling authorities.
+Microcontroller (Arduino/Raspberry Pi)
 
-⚙ Hardware Integration Smart Dustbin Prototype:
+Wi-Fi/LoRa module to send data to the cloud
 
-Auto-sorting mechanism (dry/wet/plastic/etc.).
+🧑‍💻 Tech Stack
+Frontend: HTML, CSS, JavaScript
 
-Ultrasonic sensor for fill-level detection.
+CSS Framework: Bootstrap / Tailwind (optional)
 
-Microcontroller (Arduino/Raspberry Pi).
+APIs: Google Maps API for geolocation
 
-Wi-Fi/LoRa module to send data to the cloud.
+🏆 Achievements
+✅ Built in under 24 hours
 
-🧑‍💻 Tech Stack 💻 Frontend HTML, CSS, JavaScript
+✅ Fully working prototype demoed at BIS NEXUS
 
-Bootstrap / Tailwind (Optional)
+✅ Received positive jury feedback
 
-Google Maps API for geolocation
+📜 License
+This project is licensed under the MIT License. See the LICENSE file for details.
 
-🏆 Achievements ✅ Built in under 24 hours ✅ Fully working prototype demoed at [BIS NEXUS] ✅ Positive jury feedback
-
-📜 License This project is licensed under the MIT License. See LICENSE for more details.
+👤 Author
+Alpha-hub9
